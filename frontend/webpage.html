@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Calculator</h1>
+    <div id="app">
+        <form id="form">
+            <input type="number" v-model="num1" placeholder="Number 1">
+            <input type="number" v-model="num2" placeholder="Number 2">
+            <div>
+              <button type="button" @click="send('add')">Add</button>
+              <button type="button" @click="send('subtract')">Subtract</button>
+            </div>
+
+        </form>
+        <h2>Result: <span>{{ result }}</span></h2>
+    </div>
+
+    <script type="module">
+        import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+
+        createApp({
+            setup() {
+                const num1 = ref(0);
+                const num2 = ref(0);
+                const result = ref(0);
+
+                const send = async (operation) => {
+    
+                  if (num1.value === '') {
+                    num1.value = 0;
+                  }
+                  if (num2.value === '') {
+                    num2.value = 0;
+                  }
+          
+                    try {
+                        console.log('Performing operation:', operation, num1.value, num2.value);
+                        const response = await fetch(`http://localhost:3000/${operation}`, {
+                            method: 'POST',
+                            body: new URLSearchParams({
+                                num1: num1.value,
+                                num2: num2.value,
+                            }),
+                        });
+
+                        const data = await response.json();
+                        console.log('Received: ',data);
+                        result.value = data.result;
+                    } catch (error) {
+                        console.error(error);
+                    }
+                };
+
+                return {
+                    num1,
+                    num2,
+                    result,
+                    send,
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
