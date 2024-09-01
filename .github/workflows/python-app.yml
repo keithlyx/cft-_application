@@ -29,4 +29,5 @@ jobs:
 
     - name: Run tests
       run: |
+        cd ./backend
         python -m unittest test_app.py
