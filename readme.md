@@ -22,6 +22,7 @@ python app.py
 ```
 
 ### Run tests
+* automated testing already performned by github actions
 ```
 python -m unittest test_app.py
 ```
